@@ -239,3 +239,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# external/outputs/features/
+# external/outputs/cropped/
+# external/outputs/figures/
+# external/data/
