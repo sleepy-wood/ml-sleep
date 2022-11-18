@@ -243,3 +243,5 @@ external/outputs/features/
 external/outputs/cropped/
 external/outputs/figures/
 external/data/
+
+motion*.zip
