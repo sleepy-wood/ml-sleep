@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "app"
+version = "0.0.1"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi~=0.85.2",
+    "uvicorn[standard]~=0.19.0",
+    "clip-client~=0.8.0",
+    "pydantic[dotenv]~=1.10.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black~=22.8.0",
+    "isort[requirements_deprecated_finder]~=5.10.1",
+    "pylint~=2.15.3",
+]
+
+[project.scripts]
+app = "app.cli:main"
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.pylint.format]
+max-line-length = 79
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-docstring",
+    "logging-fstring-interpolation",
+    "too-few-public-methods",
+    "too-many-arguments",
+    "too-many-instance-attributes",
+    "too-many-ancestors",
+    "too-many-locals",
+    "too-many-statements",
+    "too-many-lines",
+    "wrong-import-order",
+    "duplicate-code",
+]
+
+[tool.pylint.master]
+init-hook = "import sys; sys.path.append('.')"
+
+[tool.pylint.basic]
+good-names-rgxs = "^[_a-z][_a-z0-9]?$"
+
+[tool.pylint.typecheck]
+generated-members = "torch.*"
