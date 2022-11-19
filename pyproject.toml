@@ -15,6 +15,7 @@ dependencies = [
     "matplotlib~=3.6.2",
     "seaborn~=0.12.1",
     "torch~=1.13.0",
+    "pytorch-lightning~=1.8.2",
 ]
 
 [project.optional-dependencies]
@@ -26,6 +27,7 @@ dev = [
 
 [project.scripts]
 app = "app.cli:main"
+train = "app.train:main"
 
 [tool.setuptools]
 packages = ["app"]
