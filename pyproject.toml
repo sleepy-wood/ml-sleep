@@ -17,6 +17,7 @@ dependencies = [
     "torch~=1.13.0",
     "pytorch-lightning~=1.8.2",
     "torchmetrics~=0.10.3",
+    "jsonargparse[signatures]~=4.17.0",
 ]
 
 [project.optional-dependencies]
@@ -27,7 +28,7 @@ dev = [
 ]
 
 [project.scripts]
-train = "app.train:main"
+cli = "app.cli:main"
 
 [tool.setuptools]
 packages = ["app"]

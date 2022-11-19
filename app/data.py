@@ -12,18 +12,18 @@ from torch.utils.data import DataLoader, Dataset
 
 def read_data(sid):
     hrate = pd.read_csv(
-        f"../data/heart_rate/{sid}_heartrate.txt",
+        f"data/heart_rate/{sid}_heartrate.txt",
         header=None,
         names=["tssec", "hrate"],
     )
     sleep = pd.read_csv(
-        f"../data/labels/{sid}_labeled_sleep.txt",
+        f"data/labels/{sid}_labeled_sleep.txt",
         header=None,
         names=["tssec", "sleep"],
         sep=" ",
     )
     accel = pd.read_csv(
-        f"../data/motion/{sid}_acceleration.txt",
+        f"data/motion/{sid}_acceleration.txt",
         header=None,
         names=["tssec", "acc_x", "acc_y", "acc_z"],
         sep=" ",
@@ -98,8 +98,8 @@ class SleepDataset(Dataset):
         hrate, sleep, accel = self.data[sid]
         row = sleep.iloc[idx, :]
         accs, hvs, hds, label = gen_row(row, hrate, accel, self.rng, self.nwin)
-        accs, hvs, hds = [
-            torch.tensor(x, dtype=torch.float) for x in (accs, hvs, hds)
+        accs, hvs, hds, label = [
+            torch.tensor(x, dtype=torch.float) for x in (accs, hvs, hds, label)
         ]
         return accs, hvs, hds, label
 
@@ -121,7 +121,7 @@ class SleepDataModule(LightningDataModule):
     def setup(self, stage: str = None) -> None:
         sids = sorted(
             int(p.stem.split("_")[0])
-            for p in Path("../data/labels").glob("*.txt")
+            for p in Path("data/labels").glob("*.txt")
         )
         data = [read_data(sid) for sid in sids]
         random.Random(self.hparams.val_seed).shuffle(data)

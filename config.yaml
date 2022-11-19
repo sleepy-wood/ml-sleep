@@ -1,0 +1,26 @@
+# pytorch_lightning==1.8.2
+seed_everything: 1234
+
+trainer:
+  max_epochs: 10
+  accelerator: gpu
+#   precision: 32
+
+model:
+  nwin: 5
+  net_hidden_dim: 128
+  net_num_hidden: 3
+  net_dropout_p: 0.1
+  opt_lr: 0.0001
+  opt_wd: 0.05
+  opt_beta1: 0.9
+  opt_beta2: 0.999
+  ema_decay: 0.999
+
+data:
+  batch_size: 64
+  num_workers: 8
+  val_num: 2
+  val_seed: 1234
+  seed: 1234
+  nwin: 5

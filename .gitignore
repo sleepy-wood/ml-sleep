@@ -246,3 +246,5 @@ external/data/
 
 motion*.zip
 data/
+
+lightning_logs/
