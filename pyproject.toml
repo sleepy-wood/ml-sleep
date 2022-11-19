@@ -26,7 +26,6 @@ dev = [
 ]
 
 [project.scripts]
-app = "app.cli:main"
 train = "app.train:main"
 
 [tool.setuptools]
