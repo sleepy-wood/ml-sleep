@@ -16,6 +16,7 @@ dependencies = [
     "seaborn~=0.12.1",
     "torch~=1.13.0",
     "pytorch-lightning~=1.8.2",
+    "torchmetrics~=0.10.3",
 ]
 
 [project.optional-dependencies]
