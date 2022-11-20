@@ -4,13 +4,26 @@ seed_everything: 1234
 trainer:
   max_epochs: 10
   accelerator: gpu
-#   precision: 32
+  callbacks:
+    - class_path: pytorch_lightning.callbacks.EarlyStopping
+      init_args:
+        monitor: val_ema/acc
+        mode: max
+        patience: 3
+        min_delta: 0.001
+    - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+      init_args:
+        monitor: val_ema/acc
+        mode: max
+        save_top_k: 1
+        save_last: true
+        filename: "{epoch:02d}-{val_ema/acc:.4f}"
 
 model:
   nwin: 5
-  net_hidden_dim: 128
+  net_hidden_dim: 1024
   net_num_hidden: 3
-  net_dropout_p: 0.1
+  net_dropout_p: 0.5
   opt_lr: 0.0001
   opt_wd: 0.05
   opt_beta1: 0.9
@@ -18,10 +31,10 @@ model:
   ema_decay: 0.999
 
 data:
-  batch_size: 64
+  batch_size: 256
   num_workers: 2
   val_num: 2
   val_seed: 1234
-  uniform_sampling: false
+  uniform_sampling: true
   seed: 1234
   nwin: 5
