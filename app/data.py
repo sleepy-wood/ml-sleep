@@ -1,5 +1,5 @@
 import random
-from collections import namedtuple
+from collections import Counter, namedtuple
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import torch
 from pytorch_lightning import LightningDataModule
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
 
 
 def read_data(sid):
@@ -68,6 +68,14 @@ def gen_row(
     return [acc_x, acc_y, acc_z], hvs, hds, row.sleep
 
 
+def create_uniform_sampler(dataset: Dataset) -> WeightedRandomSampler:
+    labels = dataset.labels
+    weights = {k: 1 / v for k, v in Counter(labels).items()}
+    print(f"Sampling weights: {weights}")
+    weights = [weights[l] for l in labels]
+    return WeightedRandomSampler(weights, len(weights))
+
+
 class SleepDataset(Dataset):
     def __init__(
         self,
@@ -79,6 +87,7 @@ class SleepDataset(Dataset):
         self.data = data
         self.lens = [len(d[1]) for d in data]
         self.cumlen = np.cumsum(self.lens)
+        self.labels = np.concatenate([d[1]["sleep"].values for d in data])
         self.seed = seed
         self.nwin = nwin
         self.train = train
@@ -116,6 +125,7 @@ class SleepDataModule(LightningDataModule):
         num_workers: int,
         val_num: int,
         val_seed: int,
+        uniform_sampling: bool,
         seed: int,
         nwin: int = 5,
     ) -> None:
@@ -147,11 +157,16 @@ class SleepDataModule(LightningDataModule):
             )
 
     def train_dataloader(self) -> DataLoader:
+        if self.hparams.uniform_sampling:
+            kwargs = dict(sampler=create_uniform_sampler(self.train_data))
+        else:
+            kwargs = dict(shuffle=True)
         return DataLoader(
             self.train_data,
             batch_size=self.hparams.batch_size,
             num_workers=self.hparams.num_workers,
-            shuffle=True,
+            pin_memory=True,
+            **kwargs,
         )
 
     def val_dataloader(self) -> DataLoader:
@@ -159,5 +174,6 @@ class SleepDataModule(LightningDataModule):
             self.val_data,
             batch_size=self.hparams.batch_size,
             num_workers=self.hparams.num_workers,
+            pin_memory=True,
             shuffle=False,
         )
