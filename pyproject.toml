@@ -19,6 +19,7 @@ dependencies = [
     "torchmetrics~=0.10.3",
     "jsonargparse[signatures]~=4.17.0",
     "tensorboard~=2.11.0",
+    "coremltools~=6.1",
 ]
 
 [project.optional-dependencies]

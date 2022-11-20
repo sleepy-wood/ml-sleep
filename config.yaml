@@ -22,6 +22,6 @@ data:
   num_workers: 2
   val_num: 2
   val_seed: 1234
-  uniform_sampling: true
+  uniform_sampling: false
   seed: 1234
   nwin: 5
