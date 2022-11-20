@@ -90,13 +90,17 @@ class SleepDataset(Dataset):
     def __getitem__(self, idx: int) -> tuple:
         if not self.train:
             self.rng = np.random.default_rng(self.seed + idx)
-        sid = np.searchsorted(self.cumlen, idx)
-        if sid == len(self.cumlen):
-            sid -= 1
+        sid = np.searchsorted(self.cumlen, idx, side="right")
+        # if sid == len(self.cumlen):
+        #     sid -= 1
         if sid > 0:
             idx -= self.cumlen[sid - 1]
         hrate, sleep, accel = self.data[sid]
-        row = sleep.iloc[idx, :]
+        try:
+            row = sleep.iloc[idx, :]
+        except IndexError:
+            print(sleep.describe(), sleep.info(), idx, sid)
+            raise
         accs, hvs, hds, label = gen_row(row, hrate, accel, self.rng, self.nwin)
         accs, hvs, hds, label = [
             torch.tensor(x, dtype=torch.float) for x in (accs, hvs, hds, label)

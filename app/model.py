@@ -111,11 +111,9 @@ class SleepModel(LightningModule):
     def validation_step(self, batch: tuple, batch_idx: int) -> None:
         accs, hvs, hds, label = batch
         logits = self.net(accs, hvs, hds)
-        self.log_dict(self.metrics(logits.cpu(), label.cpu()))
+        self.log_dict(self.metrics(logits, label))
         logits_ema = self.net_ema(accs, hvs, hds)
-        self.log_dict(
-            self.metrics_ema(logits_ema.cpu(), label.cpu()), prog_bar=True
-        )
+        self.log_dict(self.metrics_ema(logits_ema, label), prog_bar=True)
 
     def configure_optimizers(self) -> torch.optim.Optimizer:
         return torch.optim.AdamW(

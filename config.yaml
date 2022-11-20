@@ -19,7 +19,7 @@ model:
 
 data:
   batch_size: 64
-  num_workers: 8
+  num_workers: 2
   val_num: 2
   val_seed: 1234
   seed: 1234
