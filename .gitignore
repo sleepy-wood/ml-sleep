@@ -245,6 +245,7 @@ external/outputs/figures/
 external/data/
 
 motion*.zip
-data/
+data/*
+!data/.gitkeep
 
 lightning_logs/
