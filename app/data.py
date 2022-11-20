@@ -10,7 +10,7 @@ from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader, Dataset, WeightedRandomSampler
 
 
-def read_data(sid):
+def read_data(sid: int) -> tuple:
     hrate = pd.read_csv(
         f"data/heart_rate/{sid}_heartrate.txt",
         header=None,
